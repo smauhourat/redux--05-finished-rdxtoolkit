@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Person from '../../components/Person/Person';
+import AddPerson from '../../components/AddPerson/AddPerson';
 import { useSelector, useDispatch } from 'react-redux';
 import { addPerson, removePerson, selectPersons } from './personsSlice';
 
@@ -10,30 +12,24 @@ export function Persons() {
 
     return (
         <div>
-            <input 
-                type="text"
-                placeholder="Name"
-                value={name}
-                onChange={e => setName(e.target.value)}
+            <AddPerson 
+                name={name}
+                changeName={e => setName(e.target.value)}
+                age={age}
+                changeAge={e => setAge(e.target.value)}
+                clicked={() =>
+                    dispatch(addPerson({name: name, age: age}))}
             />
-            <input 
-                type="text"
-                placeholder="Age"
-                value={age}
-                onChange={e => setAge(e.target.value)}
-            />
-            <button onClick={() =>
-            dispatch(addPerson({name: name, age: age}))}>Add Person</button>
-            <br />
             <p>Cantidad Total: {persons.length}</p>
-            {persons.map(p => (
-                <div onClick={() => 
-                dispatch(removePerson({id: p.id}))}>
-                    <hr></hr>
-                    <h1>{p.name}</h1><p>{p.age}</p>
-                    <hr></hr>
-                </div>
-            ))}
+            {persons.map(person => (
+                <Person 
+                    key={person.id}
+                    name={person.name}
+                    age={person.age}
+                    clicked={() => 
+                        dispatch(removePerson({id: person.id}))}
+                />
+            ))}            
         </div>
     )
 }
